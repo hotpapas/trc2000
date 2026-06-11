@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Hot Papas y Alitas - Menú</title>
     <style>
         * {
@@ -16,21 +16,20 @@
             color: white;
             overflow: hidden;
             height: 100vh;
+            background: #000;
         }
         
         #background-video {
             position: fixed;
-            top: 50%;
-            left: 50%;
-            min-width: 100%;
-            min-height: 100%;
-            width: auto;
-            height: auto;
-            transform: translate(-50%, -50%);
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;           /* Muestra el video completo sin zoom */
+            background-color: #000;
             z-index: -1;
-            object-fit: cover;
         }
-        
+
         .overlay {
             position: fixed;
             top: 0;
@@ -57,8 +56,8 @@
         }
         
         .logo {
-            max-width: 280px;
-            width: 90%;
+            max-width: 240px;
+            width: 85%;
             filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.6));
         }
         
@@ -86,6 +85,8 @@
             gap: 8px;
             transition: all 0.3s ease;
             backdrop-filter: blur(8px);
+            min-width: 50px;
+            justify-content: center;
         }
         
         .nav-button:hover {
@@ -115,11 +116,11 @@
             background: #e30613;
             color: white;
             padding: 18px 50px;
-            font-size: 22px;
+            font-size: 21px;
             font-weight: bold;
             border: none;
             border-radius: 50px;
-            width: 85%;
+            width: 90%;
             max-width: 320px;
             text-align: center;
             text-decoration: none;
@@ -138,16 +139,30 @@
             opacity: 0.9;
             padding-bottom: 15px;
         }
-        
+
+        /* Optimizaciones extras para móviles */
         @media (max-width: 480px) {
             .logo { max-width: 220px; }
-            .btn { font-size: 19px; padding: 16px 40px; }
+            .btn { 
+                font-size: 19px; 
+                padding: 16px 40px; 
+            }
+            .nav-button {
+                padding: 10px 16px;
+                font-size: 15px;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Video de fondo -->
-    <video id="background-video" autoplay loop muted playsinline>
+    <!-- Video de fondo optimizado para celular -->
+    <video id="background-video" 
+           autoplay 
+           loop 
+           muted 
+           playsinline 
+           webkit-playsinline
+           preload="auto">
         <source src="fon.mp4" type="video/mp4">
         Tu navegador no soporta videos.
     </video>
@@ -156,12 +171,10 @@
     
     <!-- Barra superior -->
     <div class="top-nav">
-        <!-- Instagram -->
         <a href="https://www.instagram.com/hotpapastrc" target="_blank" class="nav-button">
             <img src="ig.png" alt="Instagram" width="28" height="28" style="border-radius: 6px;">
         </a>
         
-        <!-- WhatsApp con tel.png -->
         <a href="https://wa.me/528715021688?text=HOLA%20TE%20VI%20EN%20EL%20MENU%20DE%20EASYTAP%20QUISIERA%20ORDENAR" 
            target="_blank" 
            class="nav-button whatsapp-btn">
@@ -170,12 +183,10 @@
     </div>
     
     <div class="content">
-        <!-- Logo centrado arriba -->
         <header>
             <img src="log.png" alt="Hot Papas y Alitas" class="logo">
         </header>
         
-        <!-- Botones principales -->
         <div class="main-buttons">
             <a href="menu.html" class="btn">VER MENÚ</a>
             <a href="https://share.google/6dKE2ZMsr09AT3BXh" target="_blank" class="btn">RECOMIÉNDANOS</a>
@@ -188,9 +199,18 @@
 
     <script>
         const video = document.getElementById('background-video');
+        
+        // Loop más confiable
         video.addEventListener('ended', () => {
             video.currentTime = 0;
             video.play();
+        });
+
+        // Evita pausas en móviles
+        video.addEventListener('pause', () => {
+            if (video.currentTime < video.duration) {
+                video.play();
+            }
         });
     </script>
 </body>
